@@ -149,11 +149,13 @@ button, input, textarea { font: inherit; }
 .primary-button,
 .secondary-button,
 .contact-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.2s ease;
 }
 
 .nav-button,
@@ -177,6 +179,15 @@ button, input, textarea { font: inherit; }
 .contact-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 30px rgba(87, 98, 255, 0.24);
+}
+
+.nav-button:active,
+.primary-button:active,
+.secondary-button:active,
+.contact-button:active,
+.footer-links a:active {
+  transform: translateY(0);
+  filter: none;
 }
 
 .hero {
@@ -520,14 +531,17 @@ button, input, textarea { font: inherit; }
   background: linear-gradient(180deg, transparent 58%, rgba(9, 12, 30, 0.24));
 }
 
-.project-image img {
+.project-image img,
+.project-image video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.45s ease;
+  pointer-events: none;
 }
 
-.project-card:hover .project-image img {
+.project-card:hover .project-image img,
+.project-card:hover .project-image video {
   transform: scale(1.06);
 }
 
@@ -774,10 +788,15 @@ button, input, textarea { font: inherit; }
   border-radius: 20px;
 }
 
-.modal-visual img {
+.modal-visual img,
+.modal-visual video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.modal-visual [hidden] {
+  display: none;
 }
 
 .modal-content {

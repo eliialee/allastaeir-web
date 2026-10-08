@@ -3,6 +3,7 @@ const navLinks = document.querySelectorAll('.nav-links a');
 const projectCards = document.querySelectorAll('.project-card');
 const modal = document.getElementById('projectModal');
 const modalImage = document.getElementById('modalImage');
+const modalVideo = document.getElementById('modalVideo');
 const modalMeta = document.getElementById('modalMeta');
 const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
@@ -13,6 +14,8 @@ const cursor = document.querySelector('.cursor');
 
 const createBubbles = () => {
   const bubbleCount = 18;
+  document.querySelectorAll('.bubble').forEach((bubble) => bubble.remove());
+
   for (let i = 0; i < bubbleCount; i += 1) {
     const bubble = document.createElement('span');
     bubble.className = 'bubble';
@@ -24,6 +27,7 @@ const createBubbles = () => {
     document.body.appendChild(bubble);
   }
 };
+
 
 const setLoadingState = () => {
   window.setTimeout(() => {
@@ -62,8 +66,19 @@ const setActiveNav = () => {
 const bindModal = () => {
   projectCards.forEach((card) => {
     const openModal = () => {
-      modalImage.src = card.dataset.image;
-      modalImage.alt = card.dataset.title;
+      const hasVideo = Boolean(card.dataset.video);
+      modalImage.hidden = hasVideo;
+      modalVideo.hidden = !hasVideo;
+      if (hasVideo) {
+        modalVideo.src = card.dataset.video;
+        modalVideo.load();
+        modalVideo.play().catch(() => {});
+      } else {
+        modalVideo.pause();
+        modalVideo.removeAttribute('src');
+        modalImage.src = card.dataset.image;
+        modalImage.alt = card.dataset.title;
+      }
       modalMeta.textContent = card.dataset.meta;
       modalTitle.textContent = card.dataset.title;
       modalDescription.textContent = card.dataset.description;
@@ -86,6 +101,7 @@ const bindModal = () => {
     closeTrigger.addEventListener('click', () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      modalVideo.pause();
     });
   });
 
@@ -93,6 +109,7 @@ const bindModal = () => {
     if (event.key === 'Escape') {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      modalVideo.pause();
     }
   });
 };
